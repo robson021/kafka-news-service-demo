@@ -7,6 +7,7 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @EnableKafka
+@EnableReactiveMongoRepositories
 @SpringBootApplication
 public class ConsumerApp {
 

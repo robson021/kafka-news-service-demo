@@ -1,38 +1,37 @@
 package consumer;
 
 import common.model.News;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class NewsStorage {
 
-    private static final News EMPTY_NEWS;
+    private static final Logger log = LoggerFactory.getLogger(NewsStorage.class);
 
-    static {
-        News news = new News();
-        news.setTitle("Empty Title");
-        news.setContent("No content");
-        EMPTY_NEWS = news;
+    private final NewsRepository newsRepository;
+
+    public NewsStorage(NewsRepository newsRepository) {
+        this.newsRepository = newsRepository;
     }
-
-    private final List<News> news = new CopyOnWriteArrayList<>();
 
     public void addNews(News newNews) {
-        this.news.add(newNews);
+        newsRepository.save(new NewsEntity(newNews))
+                .subscribe(x -> log.info("Saved new entity: {}", x));
     }
 
-    public List<News> getAllNews() {
-        return this.news;
+    public Flux<News> getAllNews() {
+        return newsRepository.findAll()
+                .map(NewsEntity::getNews);
+
     }
 
-    public News getMostRecent() {
-        int lastIndex = news.size() - 1;
-        if (lastIndex < 0)
-            return EMPTY_NEWS;
-        return news.get(lastIndex);
+    public Mono<News> getMostRecent() {
+        return newsRepository.findTopByOrderByIdDesc()
+                .map(NewsEntity::getNews);
     }
 
 }

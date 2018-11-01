@@ -1,5 +1,6 @@
 package consumer;
 
+import common.model.News;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -29,13 +30,13 @@ public class RoutesConfig {
     private Mono<ServerResponse> getAllNews(ServerRequest request) {
         return ServerResponse.ok()
                 .contentType(APPLICATION_JSON)
-                .syncBody(newsStorage.getAllNews());
+                .body(newsStorage.getAllNews(), News.class);
     }
 
     private Mono<ServerResponse> getMostRecent(ServerRequest request) {
         return ServerResponse.ok()
                 .contentType(APPLICATION_JSON)
-                .syncBody(newsStorage.getMostRecent());
+                .body(newsStorage.getMostRecent(), News.class);
     }
 
 }
