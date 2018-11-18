@@ -2,9 +2,19 @@ package common.model;
 
 public class News {
 
+    private NewsCategory newsCategory;
+
     private String title;
 
     private String content;
+
+    public NewsCategory getNewsCategory() {
+        return newsCategory;
+    }
+
+    public void setNewsCategory(NewsCategory newsCategory) {
+        this.newsCategory = newsCategory;
+    }
 
     public String getTitle() {
         return title;
@@ -25,7 +35,8 @@ public class News {
     @Override
     public String toString() {
         return "News{" +
-                "title='" + title + '\'' +
+                "newsCategory=" + newsCategory +
+                ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 '}';
     }

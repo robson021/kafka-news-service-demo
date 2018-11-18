@@ -1,6 +1,7 @@
 package producer;
 
 import common.model.News;
+import common.model.NewsCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -47,8 +48,10 @@ public class NewsService {
     @Scheduled(fixedDelay = 10_000)
     public void publishNews() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
+        NewsCategory[] categories = NewsCategory.values();
 
         News news = new News();
+        news.setNewsCategory(categories[random.nextInt(categories.length)]);
         news.setTitle("Title " + random.nextInt(999999999));
         news.setContent(newsContent[random.nextInt(newsContent.length)]);
 
