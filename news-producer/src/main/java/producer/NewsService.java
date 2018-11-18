@@ -45,7 +45,7 @@ public class NewsService {
         this.template = template;
     }
 
-    @Scheduled(fixedDelay = 10_000)
+    @Scheduled(fixedDelay = 3_500)
     public void publishNews() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         NewsCategory[] categories = NewsCategory.values();
