@@ -14,9 +14,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 @SuppressWarnings("all")
-public class NewsService {
+public class NewsPublisher {
 
-    private static final Logger log = LoggerFactory.getLogger(NewsService.class);
+    private static final Logger log = LoggerFactory.getLogger(NewsPublisher.class);
 
     private static final String[] newsContent = {
             "Some content.",
@@ -27,21 +27,9 @@ public class NewsService {
             "Consul integre contentiones ius eu."
     };
 
-    private static final ListenableFutureCallback publishCallback = new ListenableFutureCallback() {
-        @Override
-        public void onFailure(Throwable throwable) {
-            log.error("Failed to publish news", throwable);
-        }
-
-        @Override
-        public void onSuccess(Object o) {
-            log.info("Succesfully publised news: {}", o);
-        }
-    };
-
     private final KafkaTemplate template;
 
-    public NewsService(KafkaTemplate template) {
+    public NewsPublisher(KafkaTemplate template) {
         this.template = template;
     }
 
@@ -55,6 +43,17 @@ public class NewsService {
         news.setTitle("Title " + random.nextInt(999999999));
         news.setContent(newsContent[random.nextInt(newsContent.length)]);
 
-        template.send(new GenericMessage<>(news)).addCallback(publishCallback);
+        template.send(new GenericMessage<>(news))
+                .addCallback(new ListenableFutureCallback() {
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        log.error("Failed to publish news", throwable);
+                    }
+
+                    @Override
+                    public void onSuccess(Object o) {
+                        log.info("Succesfully publised news: {}", o);
+                    }
+                });
     }
 }

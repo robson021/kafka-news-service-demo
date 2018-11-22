@@ -18,20 +18,17 @@ public class NewsStorage {
         this.newsRepository = newsRepository;
     }
 
-    public void addNews(News newNews) {
-        newsRepository.save(new NewsEntity(newNews))
-                .subscribe(x -> log.info("Saved new entity: {}", x));
+    public void addNews(News news) {
+        newsRepository.save(new NewsEntity(news)).subscribe(e -> log.info("Saved new entity: {}", e));
     }
 
     public Flux<News> getAllNews() {
-        return newsRepository.findAll()
-                .map(NewsEntity::getNews);
+        return newsRepository.findAll().map(NewsEntity::getNews);
 
     }
 
     public Mono<News> getMostRecent() {
-        return newsRepository.findTopByOrderByIdDesc()
-                .map(NewsEntity::getNews);
+        return newsRepository.findTopByOrderByIdDesc().map(NewsEntity::getNews);
     }
 
 }
