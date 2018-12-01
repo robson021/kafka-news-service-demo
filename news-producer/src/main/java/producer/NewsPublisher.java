@@ -2,8 +2,8 @@ package producer;
 
 import common.model.News;
 import common.model.NewsCategory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,10 +13,10 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Component
+@Slf4j
+@RequiredArgsConstructor
 @SuppressWarnings("all")
 public class NewsPublisher {
-
-    private static final Logger log = LoggerFactory.getLogger(NewsPublisher.class);
 
     private static final String[] newsContent = {
             "Some content.",
@@ -28,10 +28,6 @@ public class NewsPublisher {
     };
 
     private final KafkaTemplate template;
-
-    public NewsPublisher(KafkaTemplate template) {
-        this.template = template;
-    }
 
     @Scheduled(fixedDelay = 3_500)
     public void publishNews() {

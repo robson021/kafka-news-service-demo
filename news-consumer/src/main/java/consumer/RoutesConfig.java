@@ -1,6 +1,7 @@
 package consumer;
 
 import common.model.News;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -13,13 +14,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 
 @Configuration
+@RequiredArgsConstructor
 public class RoutesConfig {
 
     private final NewsStorage newsStorage;
-
-    public RoutesConfig(NewsStorage newsStorage) {
-        this.newsStorage = newsStorage;
-    }
 
     @Bean
     public RouterFunction<ServerResponse> routes() {

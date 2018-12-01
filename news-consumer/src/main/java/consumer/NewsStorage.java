@@ -1,22 +1,18 @@
 package consumer;
 
 import common.model.News;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class NewsStorage {
 
-    private static final Logger log = LoggerFactory.getLogger(NewsStorage.class);
-
     private final NewsRepository newsRepository;
-
-    public NewsStorage(NewsRepository newsRepository) {
-        this.newsRepository = newsRepository;
-    }
 
     public void addNews(News news) {
         newsRepository.save(new NewsEntity(news)).subscribe(e -> log.info("Saved new entity: {}", e));
