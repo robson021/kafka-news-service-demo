@@ -27,7 +27,18 @@ public class NewsPublisher {
             "Consul integre contentiones ius eu."
     };
 
-    private final KafkaTemplate template;
+    private final KafkaTemplate kafkaTemplate;
+
+    private final ListenableFutureCallback callback = new ListenableFutureCallback() {
+        @Override
+        public void onFailure(Throwable throwable) {
+            log.error("Failed to publish news", throwable);
+        }
+        @Override
+        public void onSuccess(Object o) {
+            log.info("Succesfully publised news: {}", o);
+        }
+    };
 
     @Scheduled(fixedDelay = 3_500)
     public void publishNews() {
@@ -38,18 +49,8 @@ public class NewsPublisher {
         news.setNewsCategory(categories[random.nextInt(categories.length)]);
         news.setTitle("Title " + random.nextInt(999999999));
         news.setContent(newsContent[random.nextInt(newsContent.length)]);
+        news.setNumberOfLikes(random.nextInt(101));
 
-        template.send(new GenericMessage<>(news))
-                .addCallback(new ListenableFutureCallback() {
-                    @Override
-                    public void onFailure(Throwable throwable) {
-                        log.error("Failed to publish news", throwable);
-                    }
-
-                    @Override
-                    public void onSuccess(Object o) {
-                        log.info("Succesfully publised news: {}", o);
-                    }
-                });
+        kafkaTemplate.send(new GenericMessage<>(news)).addCallback(callback);
     }
 }

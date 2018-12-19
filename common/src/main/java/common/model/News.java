@@ -8,6 +8,8 @@ public class News {
 
     private String content;
 
+    private int numberOfLikes;
+
     public NewsCategory getNewsCategory() {
         return newsCategory;
     }
@@ -32,12 +34,21 @@ public class News {
         this.content = content;
     }
 
+    public int getNumberOfLikes() {
+        return numberOfLikes;
+    }
+
+    public void setNumberOfLikes(int numberOfLikes) {
+        this.numberOfLikes = numberOfLikes;
+    }
+
     @Override
     public String toString() {
         return "News{" +
                 "newsCategory=" + newsCategory +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
+                ", numberOfLikes=" + numberOfLikes +
                 '}';
     }
 }
